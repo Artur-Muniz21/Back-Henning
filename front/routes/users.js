@@ -4,7 +4,7 @@ var router = express.Router();
 
 var express = require('express');
 var router = express.Router();
-const url = "https://fluffy-chainsaw-7gv9wpqvxpgfx9pp-4000.app.github.dev/users"
+const url = "https://musical-space-cod-gg4wjpv7xxwc9x7x-4000.app.github.dev/"
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
