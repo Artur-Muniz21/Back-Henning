@@ -4,8 +4,30 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//autenticação
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
+var rateLimit = require('express-rate-limit');
+var session = require('express-session');
+
 var app = express();
 app.use(express.json());
+
+//configurar requisições
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+
+app.use('/login', limiter);
+
+//Configuração de sessão
+app.use(session({
+  secret: '',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 //Rotas
 var indexRouter = require('./routes/index');
