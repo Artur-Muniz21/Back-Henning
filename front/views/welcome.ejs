@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boas-vindas!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1c92d2, #f2fcfe);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .welcome {
+            text-align: center;
+            color: white;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .welcome h1 {
+            font-size: 2.5em;
+        }
+        .welcome p {
+            font-size: 1.5em;
+        }
+        .welcome button {
+            font-size: 1em;
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-btn {
+            background-color: #008CBA; /* Blue */
+            color: white;
+        }
+        .signup-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome">
+        <h1>Gerenciamento Financeiro!</h1>
+        <p></p>
+        <button class="login-btn" onclick="location.href='/users'">Login</button>
+        <button class="signup-btn" onclick="location.href='/users'">Cadastre-se</button>
+    </div>
+</body>
+</html>
