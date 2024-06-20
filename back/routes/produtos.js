@@ -20,7 +20,7 @@ db.run(`CREATE TABLE IF NOT EXISTS produtos (
   if(err) {
     console.log('Erro ao criar a tabela produtos: ', err);
   } else {
-    console.log('Tabela de produtos criada com sucesso!');
+    console.log('Tabela produtos criada com sucesso!');
   }
 });
 
