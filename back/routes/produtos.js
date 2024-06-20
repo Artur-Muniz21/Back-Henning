@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var sqlite3 = require("sqlite3");
+const verifyJWT = require('../auth/verify-token');
 
 const db = new sqlite3.Database('./database/database.db');
 
@@ -24,7 +25,7 @@ db.run(`CREATE TABLE IF NOT EXISTS produtos (
 });
 
 // Rota GET para listar todos os produtos
-router.get('/', (req, res, next) => {
+router.get('/', verifyJWT, (req, res, next) => {
   db.all('SELECT * FROM produtos', (err, produtos) => {
     if(err){
       console.log('Produtos não encontrados: ', err);
@@ -35,7 +36,7 @@ router.get('/', (req, res, next) => {
 });
 
 // Rota GET para obter produto por ID
-router.get('/:id_produto', (req, res) => {
+router.get('/:id_produto', verifyJWT, (req, res) => {
   const { id_produto } = req.params;
   db.get('SELECT * FROM produtos WHERE id_produto = ?', [id_produto], (err, produto) => {
     if(err) {
@@ -50,7 +51,7 @@ router.get('/:id_produto', (req, res) => {
 });
 
 // Rota para registro de produto
-router.post('/register', (req, res) => {
+router.post('/register', verifyJWT, (req, res) => {
   console.log(req.body);
   const { nome_produto, valor_produto, parcela_produto, data_compra_produto, user_id } = req.body;
   db.run(`INSERT INTO produtos (nome_produto, valor_produto, parcela_produto, data_compra_produto, user_id) VALUES (?, ?, ?, ?, ?)`, 
@@ -64,7 +65,7 @@ router.post('/register', (req, res) => {
 });
 
 // Rota PUT para atualizar produto
-router.put('/:id_produto', (req, res) => {
+router.put('/:id_produto', verifyJWT, (req, res) => {
   const { id_produto } = req.params;
   const { nome_produto, valor_produto, parcela_produto, data_compra_produto, user_id } = req.body;
   db.run(`UPDATE produtos SET nome_produto = ?, valor_produto = ?, parcela_produto = ?, data_compra_produto = ?, user_id = ? WHERE id_produto = ?`,
@@ -80,7 +81,7 @@ router.put('/:id_produto', (req, res) => {
 });
 
 // Rota DELETE para excluir produto por ID
-router.delete('/:id_produto', (req, res) => {
+router.delete('/:id_produto', verifyJWT, (req, res) => {
   const { id_produto } = req.params;
   db.run('DELETE FROM produtos WHERE id_produto = ?', [id_produto], (err) => {
     if(err) {

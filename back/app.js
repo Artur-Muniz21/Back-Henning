@@ -4,51 +4,49 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-//autenticação
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcrypt');
-var rateLimit = require('express-rate-limit');
+// LIBS AUTH
+var rateLimit = require("express-rate-limit");
 var session = require('express-session');
 
-var app = express();
-app.use(express.json());
 
-//configurar requisições
+var app = express();
+app.use(express.json())
+
+// CONFIGURAÇÃO DE LIMITE DE REQUISIÇÕES
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
+  windowMs: 1 * 60 * 1000, // 15 minutes
+  max: 3, // limit each IP to 100 requests per windowMs,
+  keyGenerator: (req, res)=> req.headers['x-forwarded-for'] || req.ip
 });
 
-app.use('/login', limiter);
-
-//Configuração de sessão
+// CONFIGURAÇÃO DE SESSÃO
 app.use(session({
-  secret: '',
+  secret: '8c10472423dc7ac1b8fdb91c96793ae8d385da1af1a334950f9f22dbef19edad',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
-}));
+}))
 
-//Rotas
+// IMPORTE DAS ROTAS /ROUTES...
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var produtosRouter = require('./routes/produtos');
+var authRouter = require('./routes/auth');
 
-//Endpoints
+// DEFINI OS ENDPOINT//RECURSO PARA AS ROTAS
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/produtos',produtosRouter);
+app.use('/produtos', produtosRouter);
+app.use('/auth', limiter, authRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 
@@ -65,7 +63,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send('erro: Not Found');
+  res.send({erro:'Not found'});
 });
 
 module.exports = app;
